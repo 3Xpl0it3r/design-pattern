@@ -1,6 +1,6 @@
 package main
 
-import "design-pattern/creational"
+import "design-pattern/behavioral/command"
 
 func main() {
 	//standardMaze := new(creational.MazeGame).CreateMazeFromAbstractFactory(new(creational.MazeStandardAbstractFactory))
@@ -23,18 +23,31 @@ func main() {
 	//maze.Enter()
 
 	//
-	standardFactory := new(creational.MazeStandardAbstractFactory)
-	enchantedFactory := new(creational.MazeEnchantedAbstractFactory)
+	//standardFactory := new(creational.MazeStandardAbstractFactory)
+	//enchantedFactory := new(creational.MazeEnchantedAbstractFactory)
+	//
+	//creational.RegisterFactoryToSingleton("standard", standardFactory)
+	//creational.RegisterFactoryToSingleton("enchanted", enchantedFactory)
+	//
+	//standardMaze := new(creational.MazeGame).CreateMazeFromAbstractFactory(creational.GetFactoryByName("standard"))
+	//standardMaze.Enter()
+	//
+	//enchantedMaze := new(creational.MazeGame).CreateMazeFromAbstractFactory(creational.GetFactoryByName("enchanted"))
+	//enchantedMaze.Enter()
 
-	creational.RegisterFactoryToSingleton("standard", standardFactory)
-	creational.RegisterFactoryToSingleton("enchanted", enchantedFactory)
+	invoker := command.NewInvoker()
+	cmdA := command.NewConcreteCommandA()
+	cmdB := command.NewConcreteCommandB()
 
-	standardMaze := new(creational.MazeGame).CreateMazeFromAbstractFactory(creational.GetFactoryByName("standard"))
-	standardMaze.Enter()
+	recA := command.NewReceiver()
+	recB := command.NewReceiverB()
 
-	enchantedMaze := new(creational.MazeGame).CreateMazeFromAbstractFactory(creational.GetFactoryByName("enchanted"))
-	enchantedMaze.Enter()
+	cmdB.SetReceiver(*recB)
+	cmdA.SetReceiver(*recA)
 
+	invoker.AddCommand(cmdA)
+	invoker.AddCommand(cmdB)
+	invoker.ExecuteCommand()
 
 
 }
